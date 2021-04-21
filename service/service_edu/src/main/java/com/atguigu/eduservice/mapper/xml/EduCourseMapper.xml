@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.atguigu.eduservice.mapper.EduCourseMapper">
+
+    <select id="getCoursePublishById" resultType="com.atguigu.eduservice.entity.vo.CoursePublishVo">
+        SELECT ec.id,
+               ec.title,
+               ec.cover,
+               ec.price,
+               ec.lesson_num lessonNum,
+               et.name       teacherName,
+               es1.title     subjectLevelOne,
+               es2.title     subjectLevelTwo
+        FROM edu_course ec
+                 INNER JOIN edu_teacher et ON ec.teacher_id = et.id
+                 INNER JOIN edu_subject es1 ON ec.subject_parent_id = es1.id
+                 INNER JOIN edu_subject es2 ON ec.subject_id = es2.id
+        WHERE ec.id = #{id}
+    </select>
+
+    <select id="getCourseWebVo" resultType="com.atguigu.eduservice.entity.vo.CourseWebVo">
+        SELECT ec.id,ec.title,ec.price,ec.cover,ec.lesson_num lessonNum,ec.buy_count buyCount,ec.view_count viewCount,
+               ed.description,et.id teacherId,et.name teacherName,et.avatar,et.intro
+        FROM edu_course ec
+                 INNER JOIN edu_course_description ed ON ec.id = ed.id
+                 INNER JOIN edu_teacher et ON ec.teacher_id = et.id
+        WHERE ec.id = #{id} AND ec.status = "Normal"
+    </select>
+</mapper>
